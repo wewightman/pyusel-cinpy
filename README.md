@@ -55,6 +55,6 @@ def py_int_dot2D(a, b):
         raise ValueError("Matrices must be the same size")
     
     pointer = custom_c.dot2D_f(ct.byref(A), ct.byref(B), Ma, Na)
-    c = cinpy.copy2py(pointer, Ma, Na)
+    c = cinpy.copy2py(pointer[0], Ma, Na)
     return c
 ```
