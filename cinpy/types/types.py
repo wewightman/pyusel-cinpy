@@ -39,7 +39,19 @@ __types__.freemat_f.argtypes = ct.POINTER(ct.POINTER(ct.POINTER(ct.c_float))), c
 __types__.freemat_f.restype = None
 
 def copy2c(arr, astype=np.float32):
-    """Copy a numpy array or matrix to c"""
+    """Copy a numpy array or matrix to c
+    
+    Parameters
+    ----
+    arr: 1D or 2D numpy array to be converted to pointers
+    astype: type of variable to convert to in C NOT IMPLENETED FOR ANYTHING BUT C
+    
+    Returns
+    ----
+    arr_out: Pointer (if 1D input) or pointer of pointers (if 2D input)
+    M: ctype integer indicating the number of floats (if 1D) or pointers to floats (if 2D)
+    N: ctype integer indicating the number of floats in each pointer (Not applicable for 1D)
+    """
     if not isinstance(arr, np.ndarray):
         raise ValueError("Input must be of type numpy.ndarray")
     if np.ndim(arr) == 1:
