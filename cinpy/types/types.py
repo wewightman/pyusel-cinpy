@@ -87,12 +87,12 @@ def copy2py(arr, M:ct.c_int, N=None):
     N: the width of the matrix, if included
     """
     if N is None:
-        arr_out = np.empty(M.value)
+        arr_out = np.empty(M.value, float)
         for i in range(M.value):
             arr_out[i] = arr[i]
         return arr_out
     else:
-        mat_out = np.empty((M.value, N.value))
+        mat_out = np.empty((M.value, N.value), float)
         for i in range(M.value):
             for j in range(N.value):
                 mat_out[i,j] = arr[i][j]
