@@ -9,6 +9,9 @@ print(vec, M)
 for m in range(M.value):
     print(vec[m], end=", ")
 print("")
+
+vecpy = copy2py(vec, M)
+print(vecpy)
 free(vec, M)
 
 # convert array to matrix
