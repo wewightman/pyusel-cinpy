@@ -56,7 +56,7 @@ def copy2c(arr, astype=np.float32):
         raise ValueError("Input must be of type numpy.ndarray")
     if np.ndim(arr) == 1:
         # get cstyle clunky array from numpy
-        arr_in = np.ascontiguousarray(arr.flatten(order='c'), dtype=ct.c_float).ctypes.data_as(ct.POINTER(ct.c_float))
+        arr_in = np.ascontiguousarray(np.array(arr).flatten(order='c'), dtype=ct.c_float).ctypes.data_as(ct.POINTER(ct.c_float))
 
         # generate output pointers
         arr_out = ct.POINTER(ct.c_float)()
@@ -67,7 +67,7 @@ def copy2c(arr, astype=np.float32):
     
     elif np.ndim(arr) == 2:
         # get cstyle clunky array from numpy
-        arr_in = np.ascontiguousarray(arr.flatten(order='c'), dtype=ct.c_float).ctypes.data_as(ct.POINTER(ct.c_float))
+        arr_in = np.ascontiguousarray(np.array(arr).flatten(order='c'), dtype=ct.c_float).ctypes.data_as(ct.POINTER(ct.c_float))
 
         # generate output pointers
         arr_out = ct.POINTER(ct.POINTER(ct.c_float))()
