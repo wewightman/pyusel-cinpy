@@ -1,4 +1,4 @@
-from cinpy.conversions import copy2c, copy2py, free
+from cinpy import copy2c, copy2py, free
 import numpy as np
 
 # generate vector and copy to C
