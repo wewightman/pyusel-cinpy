@@ -56,7 +56,7 @@ def copy2c(arr, astype=np.float32):
         raise ValueError("Input must be of type numpy.ndarray")
     if np.ndim(arr) == 1:
         # get cstyle clunky array from numpy
-        arr_in = np.ascontiguousarray(np.array(arr).flatten(order='c'), dtype=ct.c_float).ctypes.data_as(ct.POINTER(ct.c_float))
+        arr_in = np.ascontiguousarray(np.array(arr, dtype=ct.c_float).flatten(order='c'), dtype=ct.c_float).ctypes.data_as(ct.POINTER(ct.c_float))
 
         # generate output pointers
         arr_out = ct.POINTER(ct.c_float)()
@@ -67,7 +67,7 @@ def copy2c(arr, astype=np.float32):
     
     elif np.ndim(arr) == 2:
         # get cstyle clunky array from numpy
-        arr_in = np.ascontiguousarray(np.array(arr).flatten(order='c'), dtype=ct.c_float).ctypes.data_as(ct.POINTER(ct.c_float))
+        arr_in = np.ascontiguousarray(np.array(arr, dtype=ct.c_float).flatten(order='c'), dtype=ct.c_float).ctypes.data_as(ct.POINTER(ct.c_float))
 
         # generate output pointers
         arr_out = ct.POINTER(ct.POINTER(ct.c_float))()
@@ -86,8 +86,23 @@ def copy2py(arr, M:ct.c_int, N=None):
     M: the length of the array/height of matrix (if N included)
     N: the width of the matrix, if included
     """
+
+    if isinstance(M, ct.c_int):
+        m = int(M.value)
+    elif isinstance(M, int):
+        m = int(M)
+    else:
+        raise ValueError("M must be a c_int or an int")
+
+    if (N is not None) and isinstance(N, ct.c_int):
+        n = int(N.value)
+    elif (N is not None) and isinstance(N, int):
+        m = int(N)
+    elif (N is not None):
+        raise ValueError("N must be a c_int or an int")
+
     if N is None:
-        arr_out = np.empty(M.value, float)
+        arr_out = np.empty(m, float)
         for i in range(M.value):
             arr_out[i] = arr[i]
         return arr_out
