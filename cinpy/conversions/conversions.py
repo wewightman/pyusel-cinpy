@@ -20,23 +20,23 @@ else:
     name = res[0]
 
 # load the c library
-__types__ = ct.CDLL(name)
+__conversions__ = ct.CDLL(name)
 
 # copy c-array from c-type numpy vector to C friendly array
-__types__.copyvec_f.argtypes = ct.POINTER(ct.c_float), ct.c_int, ct.POINTER(ct.POINTER(ct.c_float))
-__types__.copyvec_f.restype = None
+__conversions__.copyvec_f.argtypes = ct.POINTER(ct.c_float), ct.c_int, ct.POINTER(ct.POINTER(ct.c_float))
+__conversions__.copyvec_f.restype = None
 
 # copy c-array from c-type numpy vector to C friendly array
-__types__.copymat_f.argtypes = ct.POINTER(ct.c_float), ct.c_int, ct.c_int, ct.POINTER(ct.POINTER(ct.POINTER(ct.c_float)))
-__types__.copymat_f.restype = None
+__conversions__.copymat_f.argtypes = ct.POINTER(ct.c_float), ct.c_int, ct.c_int, ct.POINTER(ct.POINTER(ct.POINTER(ct.c_float)))
+__conversions__.copymat_f.restype = None
 
 # free pointer to array
-__types__.freevec_f.argtypes = ct.POINTER(ct.POINTER(ct.c_float)),
-__types__.freevec_f.restype = None
+__conversions__.freevec_f.argtypes = ct.POINTER(ct.POINTER(ct.c_float)),
+__conversions__.freevec_f.restype = None
 
 # free pointer to matrix
-__types__.freemat_f.argtypes = ct.POINTER(ct.POINTER(ct.POINTER(ct.c_float))), ct.c_int,
-__types__.freemat_f.restype = None
+__conversions__.freemat_f.argtypes = ct.POINTER(ct.POINTER(ct.POINTER(ct.c_float))), ct.c_int,
+__conversions__.freemat_f.restype = None
 
 def copy2c(arr, astype=np.float32):
     """Copy a numpy array or matrix to c
@@ -61,7 +61,7 @@ def copy2c(arr, astype=np.float32):
         # generate output pointers
         arr_out = ct.POINTER(ct.c_float)()
         M = ct.c_int(arr.size)
-        __types__.copyvec_f(arr_in, M, ct.byref(arr_out))
+        __conversions__.copyvec_f(arr_in, M, ct.byref(arr_out))
 
         return arr_out, M
     
@@ -73,7 +73,7 @@ def copy2c(arr, astype=np.float32):
         arr_out = ct.POINTER(ct.POINTER(ct.c_float))()
         M = ct.c_int(arr.shape[0])
         N = ct.c_int(arr.shape[1])
-        __types__.copymat_f(arr_in, M, N, ct.byref(arr_out))
+        __conversions__.copymat_f(arr_in, M, N, ct.byref(arr_out))
 
         return arr_out, M, N
     
@@ -124,6 +124,6 @@ def free(arr, M:ct.c_int, N=None):
     N: width of matrix if included
     """
     if N is None:
-        __types__.freevec_f(ct.byref(arr))
+        __conversions__.freevec_f(ct.byref(arr))
     else:
-        __types__.freemat_f(ct.byref(arr), M)
+        __conversions__.freemat_f(ct.byref(arr), M)
