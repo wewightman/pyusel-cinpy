@@ -20,5 +20,8 @@ setup(
     },
     license="MIT",
     ext_modules=[types],
+    install_requires=[
+        "numpy",
+    ],
     version="0.0.0"
 )
