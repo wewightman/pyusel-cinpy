@@ -1,6 +1,6 @@
 import ctypes as ct
 import numpy as np
-from abc import ABC
+from abc import ABC, abstractmethod
 
 def getNDpntType(nd:int, type):
     if nd == 0: return type
@@ -64,9 +64,28 @@ class CDataTensor(DataTensor):
 
 def copy2c(arr, dtype=ct.c_float):
     """Copy a ND array from python to C pointers"""
-    dims = arr.shape
+    shape = tuple(arr.shape)
     arr = np.ascontiguousarray(arr, dtype=dtype).flatten()
-    pnt = getNDCArr(dims, dtype)
+    pnt = getNDCArr(shape, dtype)
+
+    if len(shape) == 1:
+        for i in range(shape[0]): pnt[i] = arr[i]
+    else:
+        nshape = shape[:-1]
+        nval = shape[-1]
+        nitr = np.prod(nshape)
+        
+        for iitr in range(nitr):
+            idxs = [int((iitr//np.prod(nshape[(idim+1):]))%nshape[idim]) for idim in range(len(nshape))]
+            a = pnt
+
+            for idx in idxs: a = a[idx]
+
+            for itr in range(nitr): a[itr] = arr[itr + int(np.prod(nshape))]
+    
+    return CDataTensor(pnt, shape, dtype)
+        
+
 
 
 
