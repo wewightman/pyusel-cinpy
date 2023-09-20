@@ -1,0 +1,7 @@
+#ifndef __pyusel_python2c__
+#define __pyusel_python2c__
+#include <stdlib.h>
+
+$CODEHEADERS
+
+#endif
