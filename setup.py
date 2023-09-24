@@ -13,10 +13,11 @@ setup(
     name='pyusel-cinpy',
     description="C-Backed vectors and matrices",
     author_email="wew12@duke.edu",
-    packages=['cinpy', 'cinpy.conversions'],
+    packages=['cinpy', 'cinpy.conversions', 'cinpy.types'],
     package_dir={
         'cinpy':'cinpy', 
         'cinpy.conversions':'cinpy/conversions',
+        'cinpy.types':'cinpy/types'
     },
     license="MIT",
     ext_modules=[types],
