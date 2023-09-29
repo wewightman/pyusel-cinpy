@@ -19,6 +19,10 @@ for mat in data:
             print("  ", num, end=" ")
         print()
 
+datanp = data.copy2np()
+
+print(datanp)
+
 del data
 
 print("Completed")

@@ -17,6 +17,7 @@ def __get_ND_C_arr__(dims, type, fill=0):
             pntrs.append(__get_ND_C_arr__(dims[1:], type, fill=fill))
         alloc = (__get_ND_pnt_type__(nd-1, type)*dims[0])(*pntrs)
         return ct.cast(alloc, __get_ND_pnt_type__(nd, type))
+
     
 def __copy_py2c__(arr, dtype):
     """refactor an ND array from python to C pointers"""
@@ -114,3 +115,22 @@ class CDataTensor(DataTensor):
     def ismat(self):
         if len(self.shape) == 2: return True
         else: return False
+
+    def getctype(self):
+        return __get_ND_pnt_type__(len(self.shape), self.dtype)
+    
+    def copy2np(self):
+        return __copy_c2py__(self)
+
+def __copy_c2py__(data:CDataTensor):
+    # make a numpy buffer
+    if data.isvec():
+        buff = np.empty(data.shape)
+        for i in range(len(buff)):
+            buff[i] = data[i]
+        return buff
+    else:
+        arrays = []
+        for subdata in data:
+            arrays.append(__copy_c2py__(subdata))
+        return np.stack(arrays, axis=0)
