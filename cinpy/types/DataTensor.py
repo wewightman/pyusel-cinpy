@@ -15,3 +15,6 @@ class DataTensor(ABC):
     @abstractmethod
     def __del__(self):
         raise NotImplementedError()
+    
+    def idx_shape(self):
+        return self.shape[:-1]
