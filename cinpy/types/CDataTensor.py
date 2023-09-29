@@ -53,10 +53,6 @@ def __copy_tensor_recursive__(istart, source, shape, dtype):
         
         raw = (subtype * shape[0])(*subs)
         return istart, ct.cast(raw, thistype)
-
-def __ref_py2c__(arr, dtype):
-    """refactor an ND array from python to C pointers"""
-    raise NotImplementedError()
     
 class CDataTensor(DataTensor):
     """Wrapper class for ND data tensor using ctypes arrays as a data class"""
@@ -66,9 +62,8 @@ class CDataTensor(DataTensor):
         self.shape = tuple(shape)
         self.dtype = dtype
 
-    def fromnumpy(arr, dtype=ct.c_float, copy=True):
-        if copy: return __copy_py2c__(arr, dtype)
-        else: return __ref_py2c__(arr, dtype)
+    def fromnumpy(arr, dtype=ct.c_float):
+        return __copy_py2c__(arr, dtype)
 
     def __getitem__(self,value):
         if len(self.shape) == 1:
@@ -104,8 +99,10 @@ class CDataTensor(DataTensor):
             
     def byref(self):
         """Return the reference to the pointer"""
-        return self.pntr.byref()
+        return ct.byref(self.pntr)
     
     def __str__(self):
         return f"{len(self.shape)}D tensor; BaseType={self.dtype}; Shape=" + str(self.shape)
-
+    
+    def __del__(self):
+        del self.pntr

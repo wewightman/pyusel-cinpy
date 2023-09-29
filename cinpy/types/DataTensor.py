@@ -11,3 +11,7 @@ class DataTensor(ABC):
     @abstractmethod
     def __str__(self):
         raise NotImplementedError()
+    
+    @abstractmethod
+    def __del__(self):
+        raise NotImplementedError()
