@@ -106,3 +106,11 @@ class CDataTensor(DataTensor):
     
     def __del__(self):
         del self.pntr
+
+    def isvec(self):
+        if len(self.shape) == 1: return True
+        else: return False
+
+    def ismat(self):
+        if len(self.shape) == 2: return True
+        else: return False

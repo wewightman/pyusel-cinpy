@@ -11,8 +11,10 @@ print(data.byref())
 
 for mat in data:
     print(mat)
+    assert mat.ismat()
     for vec in mat:
         print(" ", vec)
+        assert vec.isvec()
         for num in vec:
             print("  ", num, end=" ")
         print()

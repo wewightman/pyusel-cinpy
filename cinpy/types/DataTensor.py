@@ -15,3 +15,11 @@ class DataTensor(ABC):
     @abstractmethod
     def __del__(self):
         raise NotImplementedError()
+    
+    @abstractmethod
+    def isvec(self):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def ismat(self):
+        raise NotImplementedError()
