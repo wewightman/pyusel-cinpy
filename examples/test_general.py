@@ -9,6 +9,14 @@ data = CDataTensor.fromnumpy(A)
 print(data)
 print(data.byref())
 
+for mat in data:
+    print(mat)
+    for vec in mat:
+        print(" ", vec)
+        for num in vec:
+            print("  ", num, end=" ")
+        print()
+
 del data
 
 print("Completed")
