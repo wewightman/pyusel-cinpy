@@ -3,6 +3,7 @@ import numpy as np
 from cinpy.types.DataTensor import DataTensor
 
 # global variables to hold buffers (maybe delete them too?)
+global __CDATATENSOR_DATA__
 __CDATATENSOR_DATA__ = {}
 
 def __get_ND_pnt_type__(nd:int, type):
@@ -65,6 +66,8 @@ def __copy_ref_recursive__(istart, source, shape, dtype):
         # calculate the reference to a position in the array
         idx = ct.byref(source, istart*ct.sizeof(dtype))
         pntr = ct.cast(idx, __get_ND_pnt_type__(1, dtype))
+        istart += nmax
+        return istart, pntr
     else:
         subtype = __get_ND_pnt_type__(len(shape)-1, dtype)
         thistype = __get_ND_pnt_type__(len(shape), dtype)
