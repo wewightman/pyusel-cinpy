@@ -29,7 +29,8 @@ A = a.reshape((11,128,2000))
 data = CDataTensor.fromnumpy(A)
 
 print(data)
-print(data.byref())
+print(data[0][0].byref())
+print(data[0][0][1999])
 
 datanp = data.copy2np()
 
