@@ -102,8 +102,22 @@ class CDataTensor(DataTensor):
 
     def fromnumpy(arr, dtype=ct.c_float):
         return __copy_long_vec__(arr, dtype)
+    
+    def __eq__(self, other):
+        if not isinstance(other, CDataTensor):
+            raise ValueError(f"Comparison between type {type(self)} and type{type(other)}")
+        
+        # compare dtypes
+        if self.dtype != other.dtype:
+            return False
+        if len(self.shape) != len(other.shape):
+            return False
+        for a, b in zip(self.shape, other.shape):
+            if a != b: return False
 
-    def __getitem__(self,value):
+        return True
+
+    def __getitem__(self, value):
         if len(self.shape) == 1:
             if isinstance(value, int):
                 if value < 0: value = (value + self.shape[0]) % self.shape[0]
@@ -172,3 +186,6 @@ def __copy_c2py__(data:CDataTensor):
         for subdata in data:
             arrays.append(__copy_c2py__(subdata))
         return np.stack(arrays, axis=0)
+    
+def __get_sub_recursive__(data, value):
+    if len(value) == 1:
